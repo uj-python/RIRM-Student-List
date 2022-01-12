@@ -1,0 +1,125 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students </title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="{% url 'info'%}">Students</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" style="justify-content: right;" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'info'%}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create'%}">Create Student</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'urlextractor'%}">url extractor</a>
+        </li>
+
+        {% if  user.is_authenticated %}       
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout'%}">Logout</a>
+          {% else %}
+          <li class="nav-item">
+          <a class="nav-link" href="{% url 'login'%}">Login</a>
+        {% endif %}
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="{% url 'search'%}" method="post" style="display: flex!important;">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" type="search" placeholder="Search Student" name="name" aria-label="Search">
+        <button  class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <center>
+    <h1>
+      Students Data
+    </h1>
+  </center>
+  {% if msg %}
+  <center>
+  <p class="text"> {{msg}}</p>
+  </center>
+  {% endif %}
+
+    {%if not data%}
+    <center>
+    <p class="text"> "No students yet"</p>
+  </center>
+  
+  {% else %}
+
+  <div class="table_div">
+    <table id="sortable" class="styled-table">
+      <thead>
+        <tr>
+          <th class="text-center" align="center">Roll No</th>
+          <th class="text-center" align="center">Name</th>
+          <th class="text-center" align="center">Class</th>
+          <th class="text-center" align="center">School</th>
+          <th class="text-center" align="center">Mobile</th>
+          <th class="text-center" align="center">Address</th>
+          <th class="text-center" align="center">Update</th>
+          <th class="text-center" align="center">Delete</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+       
+
+       
+
+        {% for i in data%}
+
+
+        <tr >
+          <td>{{i.Roll_No}}</td>
+          <td>
+            <a href="{% url 'academics' rollnumber=i.Roll_No name=i.Name %}" class="text-light">
+              {{i.Name}}
+            </a>
+          </td>
+          <td>{{i.Class}}</td>
+          <td>{{i.School}}</td>
+          <td>{{i.Mobile}}</td>
+          <td>{{i.Address}}</td>
+          <td><a href="{% url 'update' rollnumber=i.Roll_No %}" type="button" class="btn btn-primary"> UPDATE </a></td>
+          <td><a href="{% url 'delete' rollnumber=i.Roll_No %}" type="button" class="btn btn-primary"> DELETE </a></td>
+
+        </tr>
+        {% endfor %}
+        {% endif %}
+        
+      </tbody>
+    </table>
+
+  </div>
+  </div>
+
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,16 @@
+CREATE TABLE [IF NOT EXISTS] students (
+   name datatype(length) column_contraint,
+   column2 datatype(length) column_contraint,
+   column3 datatype(length) column_contraint,
+   table_constraints
+);
+
+
+Id
+		- Registration Number
+		- FirstName
+		- LastName
+		- Gender
+		- Date Of Admission
+		- Created Date
+		- Last Modified Date

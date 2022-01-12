@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+
+    <style>
+      .text
+      {
+        color:white;
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+        .results{
+            display: flex;
+            /* background-color: rgb(185, 215, 240); */
+            background-image: linear-gradient(to right top, #1e2d44, #004d7a, #008793, #00bf72, #a8eb12);
+
+            margin-top: 30px;
+        }
+        body{
+          /* background-color: #82c6f3; */
+          background-image: linear-gradient(to right top, #8818aa, #0671af, #008793, #00bf72, #a8eb12);
+          background-size: cover;
+          background-repeat: no-repeat;
+          height: 100vh;
+        }
+    .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+  .styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.container
+{
+  display: flex;
+  margin-top: 3%;
+}
+.radio
+{
+  text-align: center;
+  width: 50%;
+  align-self: center;
+}
+
+.table_div
+{
+ text-align: center;
+}
+.btns{
+  margin-top: 30px;
+}
+        </style>
+</head>
+<body>
+  <center>
+    <h1>
+      Students Data
+    </h1>
+  </center>
+    
+<div class="container">
+  <div class="radio">
+    <h3 >Sort by</h3>
+    NAME<input type="radio" name="sort_option" id="name" onclick="sortTable('name')"> <br> <br>
+    Date OF Admission<input type="radio" name="sort_option" id="date" onclick="sortTable('date')">
+  </div>
+<div class="table_div">
+<table id="sortable" class="styled-table">
+    <thead>
+      <tr>
+        <th>Roll No</th>
+        <th>Name</th>
+        <th>Class</th>
+        <th>School</th>
+        <th>Mobile</th>
+        <th>Address</th>
+
+        
+     </tr>
+    </thead>
+    <tbody>
+      {%if not data%}
+      <p class="text"> "No students yet"</p>
+      {% endif %}
+
+    {% for i in data%}
+      <tr>
+       <td>{{i.Roll_No}}</td>
+       <td>{{i.Name}}</td>
+       <td>{{i.Class}}</td>
+       <td>{{i.School}}</td>
+       <td>{{i.Mobile}}</td>
+       <td>{{i.Address}}</td>
+       
+      </tr>
+      {% endfor %}
+       </tbody>
+       </table>
+       
+       
+       <button class="btns" onclick="ExportToExcel('xlsx')">Export table to excel</button>
+      </div>
+      </div>
+
+
+
+      <div class="info">
+        <center>
+          <br>
+          <br>
+          <br>
+          <h4 class="text"> **This is an sample application to demonstrate django project to export the data from database to excel</h4>
+        </center>
+      </div>
+</body>
+
+
+
+<script>
+
+    
+    function sortTable(op) {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("sortable");
+      switching = true;
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++)
+        {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          if(op=='name')
+          {
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          //check if the two rows should switch place:
+         
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+          else
+          { x = rows[i].getElementsByTagName("TD")[3].innerHTML;
+            y = rows[i + 1].getElementsByTagName("TD")[3].innerHTML;
+          //check if the two rows should switch place:
+            d= new Date(x)
+            d1=new Date(y)
+          if (d > d1) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+
+
+
+    function ExportToExcel(type, fn, dl) {
+       var elt = document.getElementById('sortable');
+       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+       return dl ?
+         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+         XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+    }
+    </script>
+</html>

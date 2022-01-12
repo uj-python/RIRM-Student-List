@@ -1,0 +1,49 @@
+CREATE TABLE [IF NOT EXISTS] students (
+   name datatype(length) column_contraint,
+   column2 datatype(length) column_contraint,
+   column3 datatype(length) column_contraint,
+   table_constraints
+);
+
+
+Id
+		- Registration Number
+		- FirstName
+		- LastName
+		- Gender
+		- Date Of Admission
+		- Created Date
+		- Last Modified Date
+
+
+
+CREATE TABLE COMPANY(
+   ID INT PRIMARY KEY     NOT NULL,
+   Registration_Number INT PRIMARY KEY     NOT NULL,
+   FirstName           TEXT    NOT NULL,
+   LastName           TEXT    NOT NULL,
+   Gender           TEXT    NOT NULL,
+   Date Of Admission           TIMESTAMP    NOT NULL,
+   
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE COMPANY(
+   ID INT PRIMARY KEY     NOT NULL,
+   NAME           TEXT    NOT NULL,
+   AGE            INT     NOT NULL,
+   ADDRESS        CHAR(50),
+   SALARY         REAL
+);
